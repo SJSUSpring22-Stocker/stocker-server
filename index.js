@@ -12,8 +12,8 @@ app.use ((req, res, next) => {
     next()
 })
 
-app.route('/api/v1', require('./api'))
+app.use('/api/v1', require('./api'))
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log('Server started at port', process.env.PORT || 3000)
+app.listen(process.env.PORT || 8080, () => {
+    console.log('Server started at port', process.env.PORT || 8080)
 })

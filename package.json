@@ -18,6 +18,7 @@
   "homepage": "https://github.com/SJSUSpring22-Stocker/stocker-server#readme",
   "dependencies": {
     "axios": "^0.27.2",
+    "bcrypt": "^5.0.1",
     "express": "^4.18.1",
     "sqlite3": "^5.0.8"
   }
