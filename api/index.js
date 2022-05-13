@@ -77,37 +77,36 @@ router.post('/auth', (req, res) => {
         res.sendStatus(400);
     }
     else {
-        bcrypt.hash(password, 12, (err, hash) => {
+        const user_check = db.prepare('SELECT * from users WHERE name=?;')
+        user_check.all([user], async (err, rows) => {
             if (err) {
-                // problem with hashing process
                 console.error(err)
                 res.sendStatus(400);
             }
             else {
-                const user_check = db.prepare('SELECT * from users WHERE name=? AND password=?;')
-                user_check.all([user, password], (err, rows) => {
-                    if (err) {
-                        console.error(err)
-                        res.sendStatus(400);
+                if (rows.length == 0) {
+                    // user not found or password incorrect
+                    res.sendStatus(404);
+                }
+                else if (rows.length > 1) {
+                    // multiple users matching username/password
+                    // this should never be called
+                    res.sendStatus(500);
+                }
+                else {
+                    let data = rows[0];
+                    console.log(password, '::', data.password.toString())
+                    let valid = await bcrypt.compare(password, data.password.toString());
+                    if (valid) {
+                        // send successful user login info sans password hash
+                        data.password = undefined
+                        res.send(data);
                     }
                     else {
-                        if (rows.length == 0) {
-                            // user not found or password incorrect
-                            res.sendStatus(404);
-                        }
-                        else if (rows.length > 1) {
-                            // multiple users matching username/password
-                            // this should never be called
-                            res.sendStatus(500);
-                        }
-                        else {
-                            // send successful user login info sans password hash
-                            let data = rows[0];
-                            data.password = undefined
-                            res.send(data);
-                        }
+                        // user not found or password incorrect
+                        res.sendStatus(404);
                     }
-                })
+                }
             }
         })
     }
