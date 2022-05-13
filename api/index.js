@@ -95,7 +95,6 @@ router.post('/auth', (req, res) => {
                 }
                 else {
                     let data = rows[0];
-                    console.log(password, '::', data.password.toString())
                     let valid = await bcrypt.compare(password, data.password.toString());
                     if (valid) {
                         // send successful user login info sans password hash
