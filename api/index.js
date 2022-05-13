@@ -48,12 +48,8 @@ router.post('/selection', (req, res) => {
         res.status(404).send({error: `Missing Change information.`})
         return
     }
-    let stage = data['App Stage']
-    if (!stage) {
-        res.status(404).send({error: `Missing App Stage information.`})
-        return
-    }
-    let liked = data['Liked?']
+    let stage = 3;
+    let liked = data['liked']
     if (!liked) {
         res.status(404).send({error: `Missing liked information.`})
         return

@@ -11,7 +11,12 @@ app.use(express.urlencoded())
 
 // debug middleware for logging requests
 app.use ((req, res, next) => {
-    let body = JSON.stringify(req.body)
+    // clear sensitive info
+    let msg_body = {...req.body}
+    if (msg_body.password) {
+        msg_body.password = '...'
+    }
+    let body = JSON.stringify(msg_body)
     console.log(`${Date.now().toString()} ${req.method} ${req.url} - ${body.slice(0, Math.min(50, body.length))}`)
     next()
 })
