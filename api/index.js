@@ -29,7 +29,46 @@ router.post('/selection', (req, res) => {
 })
 
 router.post('/auth', (req, res) => {
-
+    let user = req.body.user
+    let password = req.body.password
+    if (!user || !password) {
+        res.sendStatus(400);
+    }
+    else {
+        bcrypt.hash(password, 12, (err, hash) => {
+            if (err) {
+                // problem with hashing process
+                console.error(err)
+                res.sendStatus(400);
+            }
+            else {
+                const user_check = db.prepare('SELECT * from users WHERE name=? AND password=?;')
+                user_check.all([user, password], (err, rows) => {
+                    if (err) {
+                        console.error(err)
+                        res.sendStatus(400);
+                    }
+                    else {
+                        if (rows.length == 0) {
+                            // user not found or password incorrect
+                            res.sendStatus(404);
+                        }
+                        else if (rows.length > 1) {
+                            // multiple users matching username/password
+                            // this should never be called
+                            res.sendStatus(500);
+                        }
+                        else {
+                            // send successful user login info sans password hash
+                            let data = rows[0];
+                            data.password = undefined
+                            res.send(data);
+                        }
+                    }
+                })
+            }
+        })
+    }
 })
 
 
