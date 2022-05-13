@@ -11,7 +11,8 @@ app.use(express.urlencoded())
 
 // debug middleware for logging requests
 app.use ((req, res, next) => {
-    console.log(`${Date.now().toString()} ${req.method} ${req.url} - ${req.body}`)
+    let body = JSON.stringify(req.body)
+    console.log(`${Date.now().toString()} ${req.method} ${req.url} - ${body.slice(0, Math.min(50, body.length))}`)
     next()
 })
 
