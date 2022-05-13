@@ -1,0 +1,24 @@
+{
+  "name": "stocker-server",
+  "version": "1.0.0",
+  "description": "API Server for the Stocker Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SJSUSpring22-Stocker/stocker-server.git"
+  },
+  "author": "Vivek Ellanti, Gregory Landowski, Pushpal Patil, Neel Thakkar",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/SJSUSpring22-Stocker/stocker-server/issues"
+  },
+  "homepage": "https://github.com/SJSUSpring22-Stocker/stocker-server#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "express": "^4.18.1",
+    "sqlite3": "^5.0.8"
+  }
+}
