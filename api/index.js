@@ -50,7 +50,7 @@ router.post('/selection', (req, res) => {
     }
     let stage = 3;
     let liked = data['liked']
-    if (!liked) {
+    if (!liked && liked != false) {
         res.status(404).send({error: `Missing liked information.`})
         return
     }
@@ -59,11 +59,16 @@ router.post('/selection', (req, res) => {
     db.serialize(() => {
         const stmt = db.prepare("INSERT INTO test_data VALUES (?,?,?,?,?,?,?)");
         stmt.run([id, user, stock, price, change, stage, liked], (err) => {
+           if (err) {
+            console.error(err)
             res.status(400).send(err);
+           }
+           else {
+            res.sendStatus(200)
+           }
         })
         stmt.finalize();
     })
-    res.sendStatus(200)
 })
 
 router.post('/auth', (req, res) => {
