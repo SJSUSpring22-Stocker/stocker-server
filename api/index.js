@@ -4,6 +4,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path')
 const db = new sqlite3.Database(process.env.STOCKER_DB);
 const bcrypt = require('bcrypt')
+const {  v4: uuidv4 } = require('uuid');
 
 let router = Router()
 
@@ -26,6 +27,47 @@ router.get('/stock', (req, res) => {
 
 router.post('/selection', (req, res) => {
     let data = req.body;
+
+    let user = data['user']
+    if (!user) {
+        res.status(404).send({error: `Missing user information.`})
+        return
+    }
+    let stock = data['Stock']
+    if (!stock) {
+        res.status(404).send({error: `Missing stock information.`})
+        return
+    }
+    let price = data['Price']
+    if (!price) {
+        res.status(404).send({error: `Missing price information.`})
+        return
+    }
+    let change = data['Change']
+    if (!change) {
+        res.status(404).send({error: `Missing Change information.`})
+        return
+    }
+    let stage = data['App Stage']
+    if (!stage) {
+        res.status(404).send({error: `Missing App Stage information.`})
+        return
+    }
+    let liked = data['Liked?']
+    if (!liked) {
+        res.status(404).send({error: `Missing liked information.`})
+        return
+    }
+    let id = uuidv4()
+
+    db.serialize(() => {
+        const stmt = db.prepare("INSERT INTO test_data VALUES (?,?,?,?,?,?,?)");
+        stmt.run([id, user, stock, price, change, stage, liked], (err) => {
+            res.status(400).send(err);
+        })
+        stmt.finalize();
+    })
+    res.sendStatus(200)
 })
 
 router.post('/auth', (req, res) => {
