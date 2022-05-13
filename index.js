@@ -17,7 +17,7 @@ app.use ((req, res, next) => {
         msg_body.password = '...'
     }
     let body = JSON.stringify(msg_body)
-    console.log(`${Date.now().toString()} ${req.method} ${req.url} - ${body.slice(0, Math.min(50, body.length))}`)
+    console.log(`${Date.now().toString()} ${req.method} ${req.url} - ${body}`)
     next()
 })
 
